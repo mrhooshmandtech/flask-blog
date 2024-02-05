@@ -1,0 +1,16 @@
+{% extends 'layout.html'%}
+{% block head %}
+  <title>ورود به حساب کاربری</title>
+  <link rel="stylesheet"href="{{ url_for('static', filename='css/submit.css') }}" />
+{% endblock head %}
+{% block body %}
+  <div class="container" id="submit">
+    <form method="post" class="form">
+      {{form.userName(class_="input",autocomplete="off")}}{{form.password(autocomplete="off",class_="input")}}
+      <button type="submit" class="btn btnPrimary">وارد شو</button>
+
+      <a href="{{ url_for("login_github_acc")}}" id="passwordReset">ورود با حساب گیت هاب</a>
+      <a href="/passwordreset/codesent=false" id="passwordReset">رمز عبور خود را فراموش کردم</a>
+    </form>
+  </div>
+{% endblock body %}

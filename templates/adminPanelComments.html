@@ -1,0 +1,63 @@
+{% extends 'layout.html'%}
+{% block head %}
+  <title>پنل ادمین - نظرات</title>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/index.css') }}"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+{% endblock head %}
+{% block body %}
+  <h1 class="textCenter">نظرات</h1>
+  {% for comment in comments %}
+    <div class="post centeredHorizontally">
+      <h3>
+        ایدی مطلب : 
+        <a class="title textPrimary" href="/post/{{comment.id}} ">{{comment.post.id}}</a>
+      </h3>
+      <div class="content" tag="content">{{comment.comment}}</div>
+      <section>
+        <form method="post">
+          <input type="hidden" name="commentID" value="{{comment.id}}" />
+          <button
+            type="submit"
+            name="commentDeleteButton"
+            class="btn btnLink textPrimary"
+          >
+            حذف
+          </button>
+        </form>
+      </section>
+      <div class="info">
+        <p>زمان ثبت : {{comment.time}}</p>
+        <p>تاریخ ثبت : {{comment.date}}</p>
+      </div>
+      {% if request.path == "/admin/comments" %}
+        <p>
+          نویسنده :
+          <a href="/user/{{comment.user.lower()}}" class="textPrimary"
+            >{{comment.user}}</a
+          >
+        </p>
+      {% endif %}
+    </div>
+  {% endfor %}
+  {% if request.path == "/admin/comments" %}
+    <a href="/admin" class="btn btnLink textPrimary goBackToAdmin"
+      ><svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon icon-tabler icon-tabler-arrow-back"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" /></svg
+    ></a>
+  {% endif %}
+{% endblock body %}

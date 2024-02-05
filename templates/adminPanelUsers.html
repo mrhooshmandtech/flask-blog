@@ -1,0 +1,59 @@
+{% extends 'layout.html'%}
+{% block head %}
+  <title>پنل ادمین</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/adminPanel.css') }}"/>
+{% endblock head %}
+{% block body %}
+  <div class="usersContainer">
+    <h1 class="textCenter">کاربران</h1>
+    {% for user in users %}
+      <div class="userContainer">
+        
+        <p>نقش : {{user.role}}</p>
+        <p>
+          شناسه :
+          <a href="/user/{{user.userName.lower()}}" class="textPrimary">{{user.userName}}</a>
+        </p>
+        <img src="{{user.profilePicture}}" alt="{{user.userName}}" class="picture" />
+        <p>ایمیل : {{user.email}}</p>
+        
+        <p>تاریخ عضویت : {{user.creationDate}}</p>
+        <p>زمان عضویت : {{user.creationTime}}</p>
+        
+        <section class="stats">
+          <form method="post">
+            <input type="hidden" name="userName" value="{{user.userName}}" />
+            <button
+              type="submit"
+              name="userDeleteButton"
+              class="textPrimary deleteUserButton"
+            >
+              حذف کاربر
+            </button>
+          </form>
+          {% if user.role == "admin" %}
+            <a href="/setuserrole/{{user.userName.lower()}}/user" class="textPrimary">تغییر نقش به کاربر</a>
+          {% else %}
+            <a href="/setuserrole/{{user.userName.lower()}}/admin" class="textPrimary">تغییر نقش به ادمین</a>
+          {% endif %}
+        </section>
+      </div>
+    {% endfor %}
+  </div>
+  <a href="/admin" class="btn btnLink textPrimary goBackToAdmin"
+    ><svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="icon icon-tabler icon-tabler-arrow-back"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" /></svg>
+    </a>
+{% endblock body %}

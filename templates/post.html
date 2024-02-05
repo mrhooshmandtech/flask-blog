@@ -1,0 +1,81 @@
+{% extends 'layout.html'%}
+{% block head %}
+  <title>{{post.title}}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}" />
+{% endblock head %}
+{% block body %}
+  <div class="post centeredHorizontally">
+    <div class="post-container">
+    <h1 class="title">{{post.title}}</h1>
+    <p class="content">
+      {{post.content|safe}} <br />
+      برچسب ها : {{post.tags.replace(" ",", ").replace(",",", ")}}
+    </p>
+    <div class="bottomBar">
+      <div>
+        <h5>👁️ {{post.views}}</h5>
+        <a href="/user/{{post.author}}">
+          <h5 class="author">
+            <img
+              class="profilePicture"
+              src="{{ profilePicture }}"
+            /> {{post.author}}
+          </h5></a
+        >
+      </div>
+      <div class="dateTime">
+        <h5>{{post.time}}</h5>
+        <h5 class="date">{{post.date}}</h5>
+      </div>
+    </div>
+    {% if post.author == session["userName"] %}
+      <div class="bottomBar">
+        <form method="post">
+          <button
+            type="submit"
+            class="btn btnLink textPrimary"
+            name="postDeleteButton"
+          >
+            حذف
+          </button>
+        </form>
+
+        <a href="/editpost/{{post.id}}" class="btn btnLink textPrimary">ویرایش</a>
+      </div>
+    {% endif %}
+    {% if comments %}
+      <div class="comments">
+        {% for comment in comments %}
+          <div class="comment">
+            <section class="commentUserNameContainer">
+              <a href="/user/{{comment.user}}" class="commentUserName"
+                >{{comment.user}} :
+                </a>
+            </section>
+            <p class="centeredHorizontally">{{comment.comment}}</p>
+            {% if session["userName"] == comment.user.userName %}
+              <form method="post">
+                <input type="hidden" name="commentID" value="{{comment.id}}" />
+                <button type="submit" name="commentDeleteButton">🗑️</button>
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+    {% endif %}
+  </div>
+    <form method="post" class="commentForm">
+      {% if session["userName"] %}
+        {{form.comment(class_="comment")}}
+        <button type="submit" class="btnSubmit">ثبت نظر</button>
+      {% else %}
+        <style>
+          .commentForm {
+            border: none;
+          }
+        </style>
+        <small>شما نیاز به<a href="/login" class="linkLogin">ورود به اکانت</a> برای ثبت نظر دارید</small>
+      {% endif %}
+    </form>
+  </div>
+  </div>
+{% endblock body %}

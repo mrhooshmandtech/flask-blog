@@ -1,0 +1,58 @@
+{% extends 'layout.html'%}
+{% block head %}
+  <title>{{ user.userName }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}"/>
+{% endblock head %}
+{% block body %}
+  <div class="container">
+    <div class="userContainer">
+      <section class="head">
+        <img src="{{ user.profilePicture }}" alt="{{ user.userName }}" class="userProfilePicture" />
+      </section>
+      <h2 class="userName">نام کاربری : {{ user.userName }}</h2>
+      <section class="stats">
+        <p class="userRole">نقش : {% if user.role == "user" %} کاربر {% else %} ادمین {% endif %} </p>
+      </section>
+      <section class="stats">
+        <p class="userViews">تعداد کل بازدیدها : {{ views }}</p>
+      </section>
+      <section class="stats">
+        <p class="userCreationDate">تاریخ عضویت : {{user.creationDate}}</p>
+      </section>
+      <section class="stats" style="margin-top: 20px;">
+        {% if session["userName"] == user.userName %}
+          <a href="/accountsettings" class="btn btnLink textPrimary">تنظیمات اکانت</a>
+          <a href="/dashboard/{{ user.userName }}" class="btn btnLink textPrimary">پنل کاربری</a>
+        {% endif %} {% if user.role == "admin" and session["userName"] == user.userName %}
+          <a href="/admin" class="btn btnLink textPrimary">پنل ادمین </a>
+        {% endif %}
+      </section>
+      {% if "userName" in session and session['userName'] == "{{ user.userName }}"%}
+        <a href="/dashboard/{{session['userName']}}">پنل کاربری</a>
+      {% endif %}
+      {% if posts %}
+        <h1 class="postsText">مطالب</h1>
+        {% for post in posts %}
+          <div class="post centeredHorizontally"  style="text-align: center !important;">
+            <a class="title textPrimary" href="/post/{{post.id}}">{{ post.title }}</a>
+            <div class="content" tag="content">{{ post.content|safe }}</div>
+            <a href="/post/{{post.id}}" class="btn btnLink">مشاهده مطلب</a>
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% if comments %}
+        <h1 class="commentsText">کامنت ها</h1>
+        {% for comment in comments %}
+        <div class="post centeredHorizontally">
+          <section class="comment">
+            <p class="commentCreationDate">تاریخ ثبت : {{ comment.date }}</p>
+            <p class="commentCreationTime">زمان ثبت : {{ comment.time }}</p>
+          </section>
+          <div class="content" tag="content">{{ comment.comment }}</div>
+        </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock body %}

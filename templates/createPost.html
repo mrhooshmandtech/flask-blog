@@ -1,0 +1,15 @@
+{% extends 'layout.html'%}
+{% block head %}
+  <title>نوشتن مطلب جدید</title>
+{% endblock head %}
+{% block body %}
+  <div class="container">
+    <form method="post" class="form formPost centeredHorizontally">
+      {{form.postTitle(class_="input centeredHorizontally" , autocomplete="off")}}
+      {{form.postTags(class_="input centeredHorizontally" , autocomplete="off")}}
+      <small>تگ ها را با , از هم جدا کنید</small>
+      {{form.postContent(class_="editor", autocomplete="off")}}
+      <button type="submit" class="btn btnPrimary">ایجاد</button>
+    </form>
+  </div>
+{% endblock body %}

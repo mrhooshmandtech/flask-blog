@@ -1,0 +1,95 @@
+{% extends 'layout.html'%}
+{% block head %}
+  {% if request.path == "/admin/posts" %}
+    <title>پنل ادمین - لیست مطالب</title>
+  {% else %}
+    <title>{{session["userName"]}} پنل کاربری</title>
+  {% endif %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"/>
+{% endblock head %}
+{% block body %}
+
+  {% if showPosts %}
+    <h1 class="textCenter">لیست مطالب</h1>
+    {% for post in posts %}
+      <div class="post centeredHorizontally">
+        <a class="title textPrimary" href="/post/{{post.id}} ">{{post.title}}</a>
+        <div class="content" tag="content">{{post.content|safe}}</div>
+        <section>
+          <a href="/editpost/{{post.id}}" class="btn btnLink textPrimary">ویرایش</a>
+          <form method="post">
+            <input type="hidden" name="postID" value="{{post.id}}" />
+            <button
+              type="submit"
+              name="postDeleteButton"
+              class="btn btnLink textPrimary"
+            >
+              حذف
+            </button>
+          </form>
+        </section>
+        <div class="info">
+          <p class="tags">برچسب ها :  {{post.tags}}</p>
+          <p>تعداد بازدید : {{post.views}}</p>
+        </div>
+        <div class="info">
+          <p>زمان ایجاد : {{post.time}}</p>
+          <p>زمان آخرین ویرایش : {{post.lastEditTime}}</p>
+        </div>
+        <div class="info">
+          <p>تاریخ ایجاد : {{post.date}}</p>
+          <p>تاریخ آخرین ویرایش : {{post.lastEditDate}}</p>
+        </div>
+        {% if request.path == "/admin/posts" %}
+        <p>
+          نویسنده :
+          <a href="/user/{{post.author}}" class="textPrimary">{{post.author}}</a>
+        </p>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% elif not showPosts %}
+    {% if request.path == "/admin/posts" %}
+      <h1>هنوز هیچ مطلب منتشر نشده است! </h1>
+    {% else %}
+      <p class="userDashboardNoPost">
+        هنوز مطلبی منتشر نشده است
+        <a href="/createpost" class="textPrimary">یکی بساز</a>?
+      </p>
+    {% endif %}
+  {% endif %}
+
+  {% if showComments and not request.path =="/admin/posts"%}
+    <h1 class="textCenter">نظرات</h1>
+    {% for comment in comments %}
+      <div class="post centeredHorizontally">
+        <div class="content" tag="content">{{comment.comment}}</div>
+        <section class="comment">
+          <p class="commentCreationDate">تاریخ ثبت : {{comment.data}}</p>
+          <p class="commentCreationTime">زمان ثبت : {{comment.time}}</p>
+        </section>
+        <a href="/post/{{comment.id}}" class="btn btnLink textPrimary">مشاهده مطلب</a>
+      </div>
+    {% endfor %} 
+  {% endif %}
+  {% if request.path == "/admin/posts" %}
+  <a href="/admin" class="btn btnLink textPrimary goBackToAdmin">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="icon icon-tabler icon-tabler-arrow-back"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />
+    </svg>
+  </a>
+  {% endif %} 
+{% endblock body %}

@@ -1,0 +1,13 @@
+{% extends 'layout.html'%}
+{% block head %}
+<title>تغییر شناسه کاربری</title>
+<link rel="stylesheet"href="{{ url_for('static', filename='css/submit.css') }}" />
+{% endblock head %}
+{% block body %}
+<div class="container">
+  <form method="post" class="form">
+    {{form.newUserName(class_="input")}}
+    <button type="submit" class="btn btnPrimary">شناسه من رو تغییر بده</button>
+  </form>
+</div>
+{% endblock body %}
